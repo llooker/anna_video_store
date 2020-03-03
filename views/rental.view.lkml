@@ -20,6 +20,7 @@ view: rental {
   }
 
   dimension_group: last_update {
+    hidden: yes
     type: time
     timeframes: [
       raw,
@@ -61,6 +62,8 @@ view: rental {
     sql: ${TABLE}.return_date ;;
   }
 
+########### Rental (Late/Outstanding) Logic ##############
+
   dimension: rental_out_time {
     type: number
     sql:  CASE
@@ -75,17 +78,46 @@ view: rental {
     sql: ${rental_out_time} ;;
   }
 
+  dimension: outstanding_rental {
+    type: yesno
+    sql: ${return_raw} IS NULL ;;
+  }
+
   dimension: is_late {
+    description: "Rental was out for over 7 days"
     type: yesno
     sql: ${rental_out_time} > 7;;
   }
 
-
-
-  dimension: staff_id {
-    type: yesno
-    sql: ${TABLE}.staff_id ;;
+  measure: count_of_late_rentals {
+    type: count
+    filters: {field: is_late
+              value: "Yes"}
   }
+
+  measure: percentage_of_late_rentals {
+    type: number
+    value_format_name: percent_2
+    drill_fields: [rental.rental_raw, rental.rental_id, rental.is_late, customer.full_name, customer.email, payment.amount, film_category.name, film.title]
+    sql: ${count_of_late_rentals} / NULLIF(${count},0) ;;
+  }
+
+############## Rental Sequencing ################
+
+  dimension: user_rental_sequence_number {
+    type: number
+    sql: (
+    SELECT COUNT(*)
+    FROM rental r
+    WHERE r.rental_id <= ${TABLE}.rental_id
+    AND r.customer_id = ${TABLE}.customer_id
+    ) ;;
+  }
+
+#   dimension: staff_id {
+#     type: yesno
+#     sql: ${TABLE}.staff_id ;;
+#   }
 
   measure: count {
     type: count

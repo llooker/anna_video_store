@@ -19,6 +19,7 @@ view: film {
   }
 
   dimension_group: last_update {
+    hidden: yes
     type: time
     timeframes: [
       raw,
@@ -82,11 +83,13 @@ view: film {
   }
 
   dimension: title {
+    label: "Film Title"
     type: string
     sql: ${TABLE}.title ;;
   }
 
   measure: count {
+    label: "Count of Film"
     type: count
     drill_fields: [film_id]
   }

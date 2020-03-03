@@ -35,7 +35,33 @@ view: customer {
   dimension: email {
     type: string
     sql: ${TABLE}.email ;;
-  }
+    action: {
+      label: "Email Promotion to Customer"
+      url: "https://desolate-refuge-53336.herokuapp.com/posts"
+      icon_url: "https://sendgrid.com/favicon.ico"
+      param: {
+        name: "some_auth_code"
+        value: "abc123456"
+      }
+      form_param: {
+        name: "Subject"
+        required: yes
+        default: "Thank you {{ customer.full_name._value }}"
+      }
+      form_param: {
+        name: "Body"
+        type: textarea
+        required: yes
+        default:
+        "Dear {{ customer.full_name._value }},
+
+        Thanks for your loyalty to the Look.  We'd like to offer you a 10% discount
+        on your next rental!  Just use the code LOYAL when checking out!
+
+        Your friends at Video Store"
+      }
+    }
+}
 
   dimension: first_name {
     type: string
@@ -45,6 +71,11 @@ view: customer {
   dimension: last_name {
     type: string
     sql: ${TABLE}.last_name ;;
+  }
+
+  dimension: full_name {
+    type: string
+    sql: CONCAT(${first_name},' ',${last_name}) ;;
   }
 
   dimension_group: last_update {

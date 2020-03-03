@@ -10,11 +10,20 @@ view: payment {
 
   dimension: amount {
     type: number
+    value_format_name: usd
     sql: ${TABLE}.amount ;;
+  }
+
+  measure: running_total {
+    type: running_total
+    value_format_name: usd
+    sql: ${amount} ;;
   }
 
   measure: total_amount {
     type: sum
+    value_format_name: usd
+    drill_fields: [rental.rental_raw, rental.rental_id, rental.is_late, customer.full_name, customer.email, payment.amount, film_category.name, film.title]
     sql: ${amount} ;;
   }
 
@@ -61,6 +70,16 @@ view: payment {
   dimension: staff_id {
     type: yesno
     sql: ${TABLE}.staff_id ;;
+  }
+
+  dimension: user_rental_running_total {
+    type: number
+    sql: (
+          SELECT SUM(amount)
+          FROM payment p
+          WHERE p.payment_id <= ${TABLE}.payment_id
+          AND p.customer_id = ${TABLE}.customer_id
+          ) ;;
   }
 
   measure: count {
