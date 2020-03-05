@@ -94,10 +94,12 @@ explore: rental {
 
 explore: rental_2 {
   from: rental
+  view_label: "Rental Info"
   label: "Executive Explore"
   sql_always_where: ${rental_month} >= '2005-05' AND ${rental_month} <= '2005-08';;
 
   join: payment {
+    view_label: "Payment Info"
     type: left_outer
     relationship: one_to_one
     sql_on: ${rental_2.rental_id} = ${payment.rental_id} ;;

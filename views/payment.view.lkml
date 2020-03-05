@@ -144,6 +144,7 @@ view: payment {
     type: number
     value_format_name: percent_2
     sql: ${count_100_users} / NULLIF(${customer.count},0) ;;
+    drill_fields: [customer.full_name, customer.email, address.address, customer_facts.days_as_customer, customer_facts.lifetime_rev, customer_facts.lifetime_rentals]
   }
 
   measure: count {
