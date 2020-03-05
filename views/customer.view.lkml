@@ -78,25 +78,25 @@ view: customer {
     sql: CONCAT(${first_name},' ',${last_name}) ;;
   }
 
-  dimension_group: last_update {
-    type: time
-    timeframes: [
-      raw,
-      time,
-      date,
-      week,
-      month,
-      quarter,
-      year
-    ]
-    sql: ${TABLE}.last_update ;;
-  }
+#   dimension_group: last_update {
+#     type: time
+#     timeframes: [
+#       raw,
+#       time,
+#       date,
+#       week,
+#       month,
+#       quarter,
+#       year
+#     ]
+#     sql: ${TABLE}.last_update ;;
+#   }
 
-  dimension: store_id {
-    type: yesno
-    # hidden: yes
-    sql: ${TABLE}.store_id ;;
-  }
+#   dimension: store_id {
+#     type: yesno
+#     hidden: yes
+#     sql: ${TABLE}.store_id ;;
+#   }
 
   measure: count {
     type: count

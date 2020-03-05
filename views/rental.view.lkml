@@ -114,6 +114,46 @@ view: rental {
     ) ;;
   }
 
+  dimension_group: first_rental {
+    type: time
+    timeframes: [
+      raw,
+      time,
+      date,
+      week,
+      month,
+      quarter,
+      year
+    ]
+    sql: (CASE
+            WHEN ${user_rental_sequence_number} = 1 THEN ${rental_raw}
+            ELSE 0
+            END);;
+  }
+
+  dimension: is_first_rental {
+    type: yesno
+    sql: ${user_rental_sequence_number} = 1 ;;
+  }
+
+  measure: first_rental_count {
+    type: count_distinct
+    sql: ${rental_id} ;;
+
+    filters: {
+      field: is_first_rental
+      value: "Yes"
+    }
+  }
+
+  measure: avg_rentals_to_100 {
+    type: average
+    value_format_name: decimal_0
+    sql: ${user_rental_sequence_number} ;;
+    filters: {field: payment.100_value_tipping_point
+              value: "Yes"}
+  }
+
 #   dimension: staff_id {
 #     type: yesno
 #     sql: ${TABLE}.staff_id ;;
