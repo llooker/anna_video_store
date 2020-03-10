@@ -4,8 +4,17 @@ view: store {
 
   dimension: store_id {
     primary_key: yes
-    type: yesno
+    type: number
     sql: ${TABLE}.store_id ;;
+  }
+
+  dimension: store_name {
+    type: string
+    sql: CASE
+          WHEN ${store_id} = 1 THEN 'Store A'
+          WHEN ${store_id} = 2 THEN 'Store B'
+          ELSE NULL
+          END;;
   }
 
   dimension: address_id {

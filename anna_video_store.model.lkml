@@ -10,10 +10,6 @@ datagroup: video_store_max_date {
   max_cache_age: "24 hours"}
 persist_with: video_store_max_date
 
-datagroup: top_customer_update {
-  sql_trigger: SELECT MAX(customer_id) FROM sakila.customer ;;
-}
-
 ########### Explore Configurations ###########
 
 ############# Marketing Dashboard/Explore #################
@@ -143,6 +139,12 @@ explore: rental_2 {
     type: left_outer
     relationship: many_to_one
     sql_on: ${rental_2.inventory_id} = ${inventory.inventory_id} ;;
+  }
+
+  join: store {
+    type: left_outer
+    relationship: many_to_one
+    sql_on: ${inventory.store_id} = ${store.store_id} ;;
   }
 
   join: film_category {

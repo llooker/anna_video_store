@@ -139,7 +139,7 @@ view: rental {
   measure: first_rental_count {
     type: count_distinct
     sql: ${rental_id} ;;
-
+    drill_fields: [customer.full_name,customer.email,customer_facts.lifetime_rev,customer_facts.avg_rental_price,customer_facts.lifetime_rentals,customer_facts.first_rental_time,customer_facts.most_recent_rental_time,customer_facts.distinct_weeks_with_rentals,customer_facts.sign_up_raw]
     filters: {
       field: is_first_rental
       value: "Yes"
@@ -152,6 +152,7 @@ view: rental {
     sql: ${user_rental_sequence_number} ;;
     filters: {field: payment.100_value_tipping_point
               value: "Yes"}
+    drill_fields: [rental.rental_raw, rental.rental_id, rental.is_late, customer.full_name, customer.email, payment.amount, film_category.name, film.title]
   }
 
 #   dimension: staff_id {

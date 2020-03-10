@@ -35,7 +35,7 @@ view: customer_facts {
 
   dimension: lifetime_rev_tier {
     type: tier
-    tiers: [10, 50, 100, 150]
+    tiers: [50, 75, 100, 125, 150]
     value_format_name: usd
     sql: ${lifetime_rev} ;;
     style: integer
